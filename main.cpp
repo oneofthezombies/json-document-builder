@@ -49,6 +49,5 @@ int main() {
     rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
     document.Accept(writer);
     std::cout << sb.GetString() << std::endl;
-
     return 0;
 }
