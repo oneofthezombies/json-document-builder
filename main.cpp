@@ -43,6 +43,7 @@ int main() {
                 .at("/P1").set(value.value2)
                 .build();
         })
+        .at("/Q").set(std::string("20"))
         .build();
 
     rapidjson::StringBuffer sb;

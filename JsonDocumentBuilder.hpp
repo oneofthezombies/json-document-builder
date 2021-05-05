@@ -135,6 +135,14 @@ namespace json_document_builder {
             return BaseStateType(std::move(data_));
         }
 
+        BaseStateType set(std::string&& value) {
+            return _set(value);
+        }
+
+        BaseStateType set(const std::string& value) {
+            return _set(value);
+        }
+
         BaseStateType set(const char* format, ...) {
             BufferType value;
             value.fill(0);
@@ -147,11 +155,6 @@ namespace json_document_builder {
             formatStringValidator(writtenCount, value.size());
 
             rapidjson::Pointer(key_.data()).Set(data_, value.data(), data_.GetAllocator());
-            return BaseStateType(std::move(data_));
-        }
-
-        BaseStateType set(const std::string& value) {
-            rapidjson::Pointer(key_.data()).Set(data_, value.c_str(), data_.GetAllocator());
             return BaseStateType(std::move(data_));
         }
 
@@ -184,6 +187,11 @@ namespace json_document_builder {
         KeyReadyState& operator=(KeyReadyState&&) = delete;
 
     private:
+        BaseStateType _set(const std::string& value) {
+            rapidjson::Pointer(key_.data()).Set(data_, DefaultValueTranslator<std::string>()(value, data_.GetAllocator()), data_.GetAllocator());
+            return BaseStateType(std::move(data_));
+        }
+
         template<typename T>
         BaseStateType _set(const std::vector<T>& value, 
                            ValueTranslatorType<T>&& translator) {
